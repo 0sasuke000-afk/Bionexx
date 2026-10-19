@@ -1,0 +1,1876 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIONEX - Innovación para un Futuro más Limpio</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        celeste: {
+                            50: '#F0F9FF',
+                            100: '#E0F2FE',
+                            200: '#BAE6FD',
+                            300: '#7DD3FC',
+                            400: '#38BDF8',
+                            500: '#00A8E8', // Accent Celeste Primary
+                            600: '#0284C7',
+                            700: '#0369A1',
+                            800: '#075985',
+                            900: '#0C4A6E',
+                        },
+                        verdeagua: {
+                            50: '#F0FDF4',
+                            100: '#DCFCE7',
+                            200: '#A7F3D0',
+                            300: '#6EE7B7',
+                            400: '#34D399',
+                            500: '#10B981', // Accent Mint / Aqua Green Primary
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065F46',
+                            900: '#064E3B',
+                        },
+                        aquacyan: {
+                            400: '#22D3EE',
+                            500: '#06B6D4',
+                            600: '#0891B2',
+                        },
+                        darkbg: '#0A192F',
+                        darkcard: '#112240',
+                        darkcardborder: '#233554'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Chart.js for Arduino Sensor Realtime Graphics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #081225;
+            color: #E2E8F0;
+        }
+
+        /* Glassmorphism styling using Celeste and Verde Agua glow */
+        .glass-panel {
+            background: rgba(17, 34, 64, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(45, 212, 191, 0.18);
+        }
+
+        .glass-panel-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-panel-hover:hover {
+            border-color: rgba(56, 189, 248, 0.4);
+            box-shadow: 0 10px 30px -10px rgba(16, 185, 129, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #38BDF8 0%, #2DD4BF 50%, #10B981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .bg-gradient-celeste-verde {
+            background: linear-gradient(135deg, #00A8E8 0%, #06B6D4 50%, #10B981 100%);
+        }
+
+        .bg-gradient-celeste-verde-soft {
+            background: linear-gradient(135deg, rgba(0, 168, 232, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #081225;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #14B8A6;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0284C7;
+        }
+
+        /* Water flow animation keyframes */
+        @keyframes waterFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .water-flow-bg {
+            background: linear-gradient(270deg, #0284C7, #06B6D4, #10B981, #34D399);
+            background-size: 300% 300%;
+            animation: waterFlow 6s ease infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+        }
+
+        .pulse-glow {
+            animation: pulseGlow 3s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-[#081225] text-slate-200 antialiased selection:bg-verdeagua-500 selection:text-white">
+
+    <!-- HEADER / NAVIGATION BAR -->
+    <header class="sticky top-0 z-50 glass-panel border-b border-verdeagua-500/20 bg-[#081225]/80 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo / Brand -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                    <div class="w-11 h-11 rounded-xl bg-gradient-celeste-verde p-0.5 flex items-center justify-center shadow-lg shadow-verdeagua-500/20">
+                        <div class="w-full h-full bg-[#081225] rounded-[10px] flex items-center justify-center">
+                            <i data-lucide="droplet" class="w-6 h-6 text-verdeagua-400"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-extrabold tracking-wider text-gradient">BIONEX</span>
+                        <span class="block text-[10px] uppercase font-semibold text-celeste-300 tracking-widest">Saneamiento Sustentable</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation Menu -->
+                <nav class="hidden lg:flex items-center space-x-1">
+                    <a href="#diagnostico" class="px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:text-verdeagua-300 hover:bg-slate-800/50 transition">Diagnóstico</a>
+                    <a href="#objetivos" class="px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:text-verdeagua-300 hover:bg-slate-800/50 transition">Objetivos</a>
+                    <a href="#arquitectura" class="px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:text-verdeagua-300 hover:bg-slate-800/50 transition">Arquitectura</a>
+                    <a href="#simulador" class="px-3 py-2 rounded-lg text-xs font-medium text-celeste-300 hover:text-celeste-200 bg-celeste-500/10 border border-celeste-500/30 hover:bg-celeste-500/20 transition">Simulador</a>
+                    <a href="#monitor" class="px-3 py-2 rounded-lg text-xs font-medium text-verdeagua-300 hover:text-verdeagua-200 bg-verdeagua-500/10 border border-verdeagua-500/30 hover:bg-verdeagua-500/20 transition">Arduino Live</a>
+                    <a href="#cronograma" class="px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:text-verdeagua-300 hover:bg-slate-800/50 transition">Cronograma</a>
+                    <a href="#equipo" class="px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:text-verdeagua-300 hover:bg-slate-800/50 transition">Equipo</a>
+                    <a href="#recursos" class="px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:text-verdeagua-300 hover:bg-slate-800/50 transition">Recursos</a>
+                </nav>
+
+                <!-- CTA Quick Action Button -->
+                <div class="hidden sm:flex items-center space-x-3">
+                    <a href="#calculadora" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-900 bg-gradient-celeste-verde hover:opacity-95 shadow-lg shadow-verdeagua-500/25 transition transform active:scale-95 flex items-center space-x-2">
+                        <i data-lucide="calculator" class="w-4 h-4"></i>
+                        <span>Evaluador Sanitario</span>
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="lg:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="p-2 rounded-lg text-slate-300 hover:bg-slate-800 focus:outline-none">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Drawer -->
+        <div id="mobile-menu" class="hidden lg:hidden border-t border-slate-800 bg-[#081225] px-4 pt-2 pb-6 space-y-2">
+            <a href="#diagnostico" class="block px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:bg-slate-800">Diagnóstico</a>
+            <a href="#objetivos" class="block px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:bg-slate-800">Objetivos</a>
+            <a href="#arquitectura" class="block px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:bg-slate-800">Arquitectura del Sistema</a>
+            <a href="#simulador" class="block px-3 py-2 rounded-md text-sm font-medium text-celeste-400 hover:bg-slate-800">Simulador de Tratamimiento</a>
+            <a href="#monitor" class="block px-3 py-2 rounded-md text-sm font-medium text-verdeagua-400 hover:bg-slate-800">Monitor Arduino</a>
+            <a href="#cronograma" class="block px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:bg-slate-800">Cronograma 8 Semanas</a>
+            <a href="#localizacion" class="block px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:bg-slate-800">Localización</a>
+            <a href="#equipo" class="block px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:bg-slate-800">Equipo EEST N.º 2</a>
+            <a href="#recursos" class="block px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:bg-slate-800">Recursos y Presupuesto</a>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="relative overflow-hidden py-16 lg:py-28 border-b border-slate-800">
+        <!-- Glow accents in background -->
+        <div class="absolute -top-32 -left-32 w-96 h-96 bg-celeste-500/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute top-1/2 -right-32 w-96 h-96 bg-verdeagua-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <!-- Left Hero Text Content -->
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-verdeagua-500/10 border border-verdeagua-500/30 text-verdeagua-300 text-xs font-semibold uppercase tracking-wider">
+                        <i data-lucide="sparkles" class="w-4 h-4 text-verdeagua-400"></i>
+                        <span>Proyecto Educativo & Biotecnológico</span>
+                    </div>
+
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight">
+                        BIONEX <br>
+                        <span class="text-gradient">Innovación para un futuro más limpio</span>
+                    </h1>
+
+                    <p class="text-slate-300 text-base sm:text-lg max-w-2xl leading-relaxed">
+                        Sistema integral descentralizado de tratamiento y depuración biotecnológica de aguas residuales domiciliarias. Diseñado para comunidades sin acceso a red cloacal, protegiendo napas subterráneas y promoviendo el reúso circular del agua.
+                    </p>
+
+                    <!-- Presenter and Institution Badge -->
+                    <div class="pt-4 pb-2 border-y border-slate-800/80 grid grid-cols-1 sm:grid-cols-2 gap-4 text-left">
+                        <div class="flex items-start space-x-3 p-3 rounded-xl bg-slate-900/60 border border-slate-800">
+                            <div class="p-2 rounded-lg bg-celeste-500/20 text-celeste-400">
+                                <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <span class="text-[11px] uppercase tracking-wider text-slate-400 font-bold block">Presentado por</span>
+                                <span class="text-sm font-semibold text-white">Isabel Mercado | Liceria & Co.</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-3 p-3 rounded-xl bg-slate-900/60 border border-slate-800">
+                            <div class="p-2 rounded-lg bg-verdeagua-500/20 text-verdeagua-400">
+                                <i data-lucide="users" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <span class="text-[11px] uppercase tracking-wider text-slate-400 font-bold block">Equipo Técnico Desarrollador</span>
+                                <span class="text-xs font-semibold text-slate-200">EEST N.º 2 (Mansilla, Núñez, Penayo, Casado, Ruíz)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hero Call to Actions -->
+                    <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
+                        <a href="#simulador" class="px-6 py-3.5 rounded-xl bg-gradient-celeste-verde text-slate-950 font-bold text-sm shadow-xl shadow-verdeagua-500/20 hover:scale-[1.02] active:scale-95 transition flex items-center space-x-2">
+                            <i data-lucide="play-circle" class="w-5 h-5"></i>
+                            <span>Probar Simulador Interactivo</span>
+                        </a>
+                        <a href="#arquitectura" class="px-6 py-3.5 rounded-xl glass-panel text-slate-200 hover:text-white font-semibold text-sm hover:bg-slate-800/60 transition flex items-center space-x-2">
+                            <i data-lucide="layers" class="w-5 h-5 text-celeste-400"></i>
+                            <span>Ver Arquitectura Técnica</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Hero Visual Box -->
+                <div class="lg:col-span-5">
+                    <div class="glass-panel p-6 rounded-3xl relative overflow-hidden border-2 border-verdeagua-500/30 shadow-2xl">
+                        <div class="absolute top-0 right-0 p-4 opacity-10">
+                            <i data-lucide="recycle" class="w-48 h-48 text-verdeagua-400"></i>
+                        </div>
+
+                        <div class="relative z-10 space-y-5">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-extrabold uppercase tracking-widest text-verdeagua-400 flex items-center space-x-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-verdeagua-400 animate-ping"></span>
+                                    <span>Eficiencia Biológica</span>
+                                </span>
+                                <span class="text-xs text-slate-400 bg-slate-800/80 px-2.5 py-1 rounded-full">v2.4 Final</span>
+                            </div>
+
+                            <!-- Highlights Metrics -->
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="bg-slate-900/80 p-4 rounded-2xl border border-celeste-500/20 text-center">
+                                    <span class="text-3xl font-black text-celeste-400">95%</span>
+                                    <span class="block text-xs text-slate-400 mt-1 font-medium">Reducción Turbidez</span>
+                                </div>
+                                <div class="bg-slate-900/80 p-4 rounded-2xl border border-verdeagua-500/20 text-center">
+                                    <span class="text-3xl font-black text-verdeagua-400">100%</span>
+                                    <span class="block text-xs text-slate-400 mt-1 font-medium">Reúso para Riego</span>
+                                </div>
+                            </div>
+
+                            <!-- Dynamic Stage Progress Card -->
+                            <div class="bg-slate-950/60 rounded-2xl p-4 border border-slate-800 space-y-3">
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="text-slate-300 font-semibold">Proceso Depurativo Tripartito</span>
+                                    <span class="text-verdeagua-300 font-bold">100% Ecológico</span>
+                                </div>
+                                <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                                    <div class="bg-gradient-celeste-verde h-full w-full rounded-full"></div>
+                                </div>
+                                <div class="grid grid-cols-3 text-[10px] text-center text-slate-400 font-medium">
+                                    <div class="text-celeste-300">1. Biodigestor</div>
+                                    <div class="text-aquacyan-400">2. Filtro Ecológico</div>
+                                    <div class="text-verdeagua-300">3. Tanque / Riego</div>
+                                </div>
+                            </div>
+
+                            <div class="p-3 rounded-xl bg-celeste-500/10 border border-celeste-500/30 flex items-center space-x-3 text-xs text-celeste-200">
+                                <i data-lucide="shield-check" class="w-6 h-6 text-celeste-400 flex-shrink-0"></i>
+                                <span>Previene la contaminación de napas subterráneas y erradica vectores de enfermedades.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: DIAGNÓSTICO DEL PROBLEMA -->
+    <section id="diagnostico" class="py-20 border-b border-slate-800/80 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-xs uppercase font-extrabold tracking-widest text-celeste-400 mb-2">01. Contexto y Problemática</h2>
+                <h3 class="text-3xl sm:text-4xl font-bold text-white">Diagnóstico Sanitario e Impacto Ambiental</h3>
+                <p class="text-slate-400 mt-3 text-sm sm:text-base">
+                    Análisis riguroso de la problemática en comunidades sin saneamiento básico centralizado y la urgencia de soluciones ecológicas eficientes.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Card 1 -->
+                <div class="glass-panel p-6 rounded-2xl glass-panel-hover relative group">
+                    <div class="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 mb-5 group-hover:scale-110 transition">
+                        <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-white mb-2">Ausencia de Red Cloacal</h4>
+                    <p class="text-slate-300 text-xs leading-relaxed">
+                        Extensas áreas de sectores rurales, periurbanos y barrios cerrados adolecen de infraestructura cloacal pública, obligando al vertido informal.
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="glass-panel p-6 rounded-2xl glass-panel-hover relative group">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 mb-5 group-hover:scale-110 transition">
+                        <i data-lucide="skull" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-white mb-2">Riesgos de Pozos Ciegos</h4>
+                    <p class="text-slate-300 text-xs leading-relaxed">
+                        Los pozos negros absorbentes tradicionales sufren colapsos continuos, derrames superficiales fétidos e infiltración directa de materia fecal sin tratar.
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="glass-panel p-6 rounded-2xl glass-panel-hover relative group">
+                    <div class="w-12 h-12 rounded-xl bg-celeste-500/10 border border-celeste-500/30 flex items-center justify-center text-celeste-400 mb-5 group-hover:scale-110 transition">
+                        <i data-lucide="waves" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-white mb-2">Contaminación de Napas</h4>
+                    <p class="text-slate-300 text-xs leading-relaxed">
+                        Lixiviados efluentes filtran bacterias coliformes y nitratos hacia la primera y segunda napa freática, comprometiendo pozos de agua potable cercanos.
+                    </p>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="glass-panel p-6 rounded-2xl glass-panel-hover relative group">
+                    <div class="w-12 h-12 rounded-xl bg-verdeagua-500/10 border border-verdeagua-500/30 flex items-center justify-center text-verdeagua-400 mb-5 group-hover:scale-110 transition">
+                        <i data-lucide="circle-dollar-sign" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-white mb-2">Elevados Costos Operativos</h4>
+                    <p class="text-slate-300 text-xs leading-relaxed">
+                        La necesidad recurrente de contratar camiones atmosféricos de desagote impone un gasto económico permanente insostenible para las familias.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Comparison Table Box -->
+            <div class="mt-12 glass-panel p-6 sm:p-8 rounded-3xl border border-slate-800">
+                <h4 class="text-xl font-bold text-white mb-6 flex items-center space-x-2">
+                    <i data-lucide="arrow-right-left" class="w-5 h-5 text-verdeagua-400"></i>
+                    <span>Comparativa Técnica: Pozo Negro Tradicional vs. Sistema BIONEX</span>
+                </h4>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs sm:text-sm text-slate-300">
+                        <thead class="bg-slate-900/80 text-slate-200 uppercase text-[11px] font-bold tracking-wider">
+                            <tr>
+                                <th class="p-4 rounded-l-xl">Parámetro / Criterio</th>
+                                <th class="p-4 text-red-400">Pozo Negro Absorbente</th>
+                                <th class="p-4 text-verdeagua-400 rounded-r-xl">Sistema BIONEX Integrado</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800">
+                            <tr>
+                                <td class="p-4 font-semibold text-white">Tratamiento Físico-Biológico</td>
+                                <td class="p-4 text-slate-400">Nulo (Solo decantación primaria sin control)</td>
+                                <td class="p-4 text-verdeagua-300 font-medium">Biodigestión Anaerobia + Filtración Multinivel</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-semibold text-white">Impacto en Napas Freáticas</td>
+                                <td class="p-4 text-red-300 font-medium">Alto riesgo de contaminación bacteriana</td>
+                                <td class="p-4 text-verdeagua-300 font-medium">Protección total por estanqueidad estricta</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-semibold text-white">Generación de Olores Sanitarios</td>
+                                <td class="p-4 text-slate-400">Permanente (Gases no tratados)</td>
+                                <td class="p-4 text-verdeagua-300 font-medium">Sello hermético con trampas hidráulicas</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-semibold text-white">Aprovechamiento de Efluentes</td>
+                                <td class="p-4 text-slate-400">Cero (Pérdida por infiltración sucia)</td>
+                                <td class="p-4 text-verdeagua-300 font-medium">Aptitud para Riego Agrícola o Jardinería</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-semibold text-white">Monitoreo Tecnológico</td>
+                                <td class="p-4 text-slate-400">Inexistente</td>
+                                <td class="p-4 text-verdeagua-300 font-medium">Sensores Arduino en tiempo real (pH/Turbidez)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: FUNDAMENTACIÓN -->
+    <section class="py-20 border-b border-slate-800/80 bg-slate-900/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-6 space-y-6">
+                    <h2 class="text-xs uppercase font-extrabold tracking-widest text-verdeagua-400">02. Justificación Técnica</h2>
+                    <h3 class="text-3xl sm:text-4xl font-bold text-white leading-tight">
+                        Fundamentación Ecológica y Biotecnológica
+                    </h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        El proyecto <strong class="text-celeste-300">BIONEX</strong> fundamenta su propuesta en la sinergia de procesos naturales depuradores intensificados tecnológicamente. Mediante la articulación de descomposición anaerobia, filtrado físico-químico continuo y automatización electrónica, transformamos un residuo contaminante en un recurso hídrico seguro.
+                    </p>
+
+                    <div class="space-y-4 pt-2">
+                        <div class="flex items-start space-x-4 p-4 rounded-2xl glass-panel">
+                            <div class="p-2.5 rounded-xl bg-celeste-500/20 text-celeste-400 flex-shrink-0">
+                                <i data-lucide="bug" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-base font-bold text-white">1. Biodigestión Anaerobia</h4>
+                                <p class="text-slate-400 text-xs mt-1">Microorganismos especializados descomponen la materia orgánica compleja sin aporte de oxígeno, reduciendo dramáticamente los sólidos en suspensión y la carga patógena.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-4 p-4 rounded-2xl glass-panel">
+                            <div class="p-2.5 rounded-xl bg-aquacyan-500/20 text-aquacyan-400 flex-shrink-0">
+                                <i data-lucide="layers" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-base font-bold text-white">2. Triada Filtrante Ecológica</h4>
+                                <p class="text-slate-400 text-xs mt-1">Combinación estratificada de Grava (retención gruesa), Arena Lavada (filtrado fino físico) y Carbón Activado Vegetal (adsorción de compuestos químicos y olores).</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-4 p-4 rounded-2xl glass-panel">
+                            <div class="p-2.5 rounded-xl bg-verdeagua-500/20 text-verdeagua-400 flex-shrink-0">
+                                <i data-lucide="refresh-cw" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-base font-bold text-white">3. Economía Circular del Agua</h4>
+                                <p class="text-slate-400 text-xs mt-1">El efluente clarificado se almacena en tanques limpios de PVC y se impulsa mediante bombeo para el riego de espacios verdes y cultivos no de consumo directo.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Visual Banner Box -->
+                <div class="lg:col-span-6 relative">
+                    <div class="glass-panel p-8 rounded-3xl border border-verdeagua-500/30 relative overflow-hidden text-center">
+                        <div class="w-20 h-20 mx-auto rounded-full bg-gradient-celeste-verde p-1 mb-6 flex items-center justify-center shadow-2xl shadow-celeste-500/30">
+                            <div class="w-full h-full bg-[#081225] rounded-full flex items-center justify-center">
+                                <i data-lucide="leaf" class="w-10 h-10 text-verdeagua-400"></i>
+                            </div>
+                        </div>
+                        <h4 class="text-2xl font-bold text-white mb-2">Sostenibilidad Cero Contaminación</h4>
+                        <p class="text-slate-300 text-xs max-w-md mx-auto leading-relaxed mb-6">
+                            "BIONEX no solo soluciona la disposición de efluentes, sino que restituye el equilibrio del ciclo hidrológico local preservando la pureza de la tierra."
+                        </p>
+
+                        <div class="inline-grid grid-cols-2 gap-4 text-left w-full max-w-xs mx-auto text-xs">
+                            <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800">
+                                <span class="text-slate-400 block text-[10px] uppercase font-bold">Norma Sanitaria</span>
+                                <span class="text-verdeagua-300 font-semibold">Cumplimiento ISO</span>
+                            </div>
+                            <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800">
+                                <span class="text-slate-400 block text-[10px] uppercase font-bold">Vida Útil Estimada</span>
+                                <span class="text-celeste-300 font-semibold">25+ Años</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: OBJETIVOS -->
+    <section id="objetivos" class="py-20 border-b border-slate-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-xs uppercase font-extrabold tracking-widest text-celeste-400 mb-2">03. Metas del Proyecto</h2>
+                <h3 class="text-3xl sm:text-4xl font-bold text-white">Objetivo General y Específicos</h3>
+                <p class="text-slate-400 mt-3 text-sm">
+                    Estructura de propósitos planteados para el desarrollo satisfactorio del prototipo funcional y su escalabilidad real.
+                </p>
+            </div>
+
+            <!-- General Objective Banner -->
+            <div class="mb-12 glass-panel p-8 rounded-3xl border-2 border-celeste-500/30 bg-gradient-celeste-verde-soft relative overflow-hidden">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div class="space-y-2 text-center md:text-left">
+                        <span class="px-3 py-1 rounded-md bg-celeste-500/20 text-celeste-300 text-xs font-extrabold uppercase tracking-widest">Objetivo General</span>
+                        <h4 class="text-2xl font-black text-white mt-2">
+                            Diseñar, construir y validar un sistema integral sustentable de biodigestión y depuración de aguas grises y negras domiciliarias.
+                        </h4>
+                        <p class="text-slate-300 text-xs sm:text-sm">
+                            Garantizando la protección de napas, permitiendo el reúso del efluente para riego y ofreciendo monitoreo automatizado de parámetros críticos de calidad hídrica.
+                        </p>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-celeste-verde flex items-center justify-center text-slate-950 font-black text-2xl shadow-xl">
+                            <i data-lucide="target" class="w-8 h-8"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7 Specific Objectives Grid -->
+            <h4 class="text-lg font-bold text-white mb-6 flex items-center space-x-2">
+                <i data-lucide="list-checks" class="w-5 h-5 text-verdeagua-400"></i>
+                <span>Los 7 Objetivos Específicos Detallados</span>
+            </h4>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Obj 1 -->
+                <div class="glass-panel p-5 rounded-2xl glass-panel-hover border border-slate-800">
+                    <span class="w-8 h-8 rounded-lg bg-celeste-500/20 text-celeste-400 flex items-center justify-center text-xs font-bold mb-3">01</span>
+                    <h5 class="text-sm font-bold text-white mb-2">Biodigestor Principal</h5>
+                    <p class="text-slate-400 text-xs">Implementar el biodigestor para la separación física inicial y degradación biológica anaeróbica de sólidos orgánicos.</p>
+                </div>
+
+                <!-- Obj 2 -->
+                <div class="glass-panel p-5 rounded-2xl glass-panel-hover border border-slate-800">
+                    <span class="w-8 h-8 rounded-lg bg-celeste-500/20 text-celeste-400 flex items-center justify-center text-xs font-bold mb-3">02</span>
+                    <h5 class="text-sm font-bold text-white mb-2">Cámara Ecológica Tripartita</h5>
+                    <p class="text-slate-400 text-xs">Diseñar e integrar la cámara filtrante secundaria constituida por capas reguladas de Grava, Arena Lavada y Carbón Activado Vegetal.</p>
+                </div>
+
+                <!-- Obj 3 -->
+                <div class="glass-panel p-5 rounded-2xl glass-panel-hover border border-slate-800">
+                    <span class="w-8 h-8 rounded-lg bg-celeste-500/20 text-celeste-400 flex items-center justify-center text-xs font-bold mb-3">03</span>
+                    <h5 class="text-sm font-bold text-white mb-2">Tanque de PVC Chato</h5>
+                    <p class="text-slate-400 text-xs">Montar el depósito estanco de PVC para acumulación segura del líquido depurado en espera de utilización.</p>
+                </div>
+
+                <!-- Obj 4 -->
+                <div class="glass-panel p-5 rounded-2xl glass-panel-hover border border-slate-800">
+                    <span class="w-8 h-8 rounded-lg bg-verdeagua-500/20 text-verdeagua-400 flex items-center justify-center text-xs font-bold mb-3">04</span>
+                    <h5 class="text-sm font-bold text-white mb-2">Sistema de Extracción y Bombeo</h5>
+                    <p class="text-slate-400 text-xs">Instalar la electrobomba de impulsión acoplada a canilla distribuidora para la aplicación de agua en riego.</p>
+                </div>
+
+                <!-- Obj 5 -->
+                <div class="glass-panel p-5 rounded-2xl glass-panel-hover border border-slate-800">
+                    <span class="w-8 h-8 rounded-lg bg-verdeagua-500/20 text-verdeagua-400 flex items-center justify-center text-xs font-bold mb-3">05</span>
+                    <h5 class="text-sm font-bold text-white mb-2">Protección de Napas Freáticas</h5>
+                    <p class="text-slate-400 text-xs">Asegurar la estanqueidad total del recorrido para erradicar la infiltración de lixiviados no tratados al subsuelo.</p>
+                </div>
+
+                <!-- Obj 6 -->
+                <div class="glass-panel p-5 rounded-2xl glass-panel-hover border border-slate-800">
+                    <span class="w-8 h-8 rounded-lg bg-verdeagua-500/20 text-verdeagua-400 flex items-center justify-center text-xs font-bold mb-3">06</span>
+                    <h5 class="text-sm font-bold text-white mb-2">Monitoreo con Arduino</h5>
+                    <p class="text-slate-400 text-xs">Integrar microcontrolador Arduino con sensores ópticos y electroquímicos para medir pH, turbidez y nivel hídrico.</p>
+                </div>
+
+                <!-- Obj 7 -->
+                <div class="glass-panel p-5 rounded-2xl glass-panel-hover border border-slate-800 md:col-span-2 lg:col-span-1">
+                    <span class="w-8 h-8 rounded-lg bg-aquacyan-500/20 text-aquacyan-400 flex items-center justify-center text-xs font-bold mb-3">07</span>
+                    <h5 class="text-sm font-bold text-white mb-2">Validación en Maqueta y Escala</h5>
+                    <p class="text-slate-400 text-xs">Validar experimentalmente el funcionamiento hidráulico en prototipo a escala antes de la implementación real.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: ARQUITECTURA COMPLETA DEL SISTEMA Y DIAGRAMA FLUIDO -->
+    <section id="arquitectura" class="py-20 border-b border-slate-800/80 bg-slate-900/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-xs uppercase font-extrabold tracking-widest text-verdeagua-400 mb-2">04. Ingeniería del Proyecto</h2>
+                <h3 class="text-3xl sm:text-4xl font-bold text-white">Arquitectura Completa del Sistema</h3>
+                <p class="text-slate-400 mt-3 text-sm">
+                    Esquema interactivo que ilustra las 6 etapas secuenciales del tratamiento del agua residual en BIONEX. Haz clic en cada etapa para ver sus especificaciones técnicas.
+                </p>
+            </div>
+
+            <!-- Interactive Architecture Step Selector -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <!-- Step Cards Menu (Left 5 Cols) -->
+                <div class="lg:col-span-5 space-y-3" id="arch-steps-menu">
+                    <!-- Step 1 -->
+                    <button onclick="setArchStep(1)" id="arch-btn-1" class="w-full text-left p-4 rounded-2xl glass-panel border border-verdeagua-500/50 bg-verdeagua-500/10 transition flex items-center space-x-4">
+                        <div class="w-10 h-10 rounded-xl bg-celeste-500/20 text-celeste-400 font-bold flex items-center justify-center flex-shrink-0">
+                            A
+                        </div>
+                        <div class="flex-1">
+                            <h5 class="text-sm font-bold text-white">a) Biodigestor Anaerobio</h5>
+                            <span class="text-[11px] text-slate-400">Descomposición microbiana inicial</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-5 h-5 text-verdeagua-400"></i>
+                    </button>
+
+                    <!-- Step 2 -->
+                    <button onclick="setArchStep(2)" id="arch-btn-2" class="w-full text-left p-4 rounded-2xl glass-panel border border-slate-800 hover:border-celeste-500/40 transition flex items-center space-x-4">
+                        <div class="w-10 h-10 rounded-xl bg-slate-800 text-slate-300 font-bold flex items-center justify-center flex-shrink-0">
+                            B
+                        </div>
+                        <div class="flex-1">
+                            <h5 class="text-sm font-bold text-white">b) Cámara de Inspección</h5>
+                            <span class="text-[11px] text-slate-400">Mantenimiento y desclave hidráulico</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-5 h-5 text-slate-600"></i>
+                    </button>
+
+                    <!-- Step 3 -->
+                    <button onclick="setArchStep(3)" id="arch-btn-3" class="w-full text-left p-4 rounded-2xl glass-panel border border-slate-800 hover:border-celeste-500/40 transition flex items-center space-x-4">
+                        <div class="w-10 h-10 rounded-xl bg-slate-800 text-slate-300 font-bold flex items-center justify-center flex-shrink-0">
+                            C
+                        </div>
+                        <div class="flex-1">
+                            <h5 class="text-sm font-bold text-white">c) Cámara Ecológica de Filtrado</h5>
+                            <span class="text-[11px] text-slate-400">Capas de Grava, Arena y Carbón</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-5 h-5 text-slate-600"></i>
+                    </button>
+
+                    <!-- Step 4 -->
+                    <button onclick="setArchStep(4)" id="arch-btn-4" class="w-full text-left p-4 rounded-2xl glass-panel border border-slate-800 hover:border-celeste-500/40 transition flex items-center space-x-4">
+                        <div class="w-10 h-10 rounded-xl bg-slate-800 text-slate-300 font-bold flex items-center justify-center flex-shrink-0">
+                            D
+                        </div>
+                        <div class="flex-1">
+                            <h5 class="text-sm font-bold text-white">d) Tanque Almacenamiento PVC</h5>
+                            <span class="text-[11px] text-slate-400">Depósito estanco chato</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-5 h-5 text-slate-600"></i>
+                    </button>
+
+                    <!-- Step 5 -->
+                    <button onclick="setArchStep(5)" id="arch-btn-5" class="w-full text-left p-4 rounded-2xl glass-panel border border-slate-800 hover:border-celeste-500/40 transition flex items-center space-x-4">
+                        <div class="w-10 h-10 rounded-xl bg-slate-800 text-slate-300 font-bold flex items-center justify-center flex-shrink-0">
+                            E
+                        </div>
+                        <div class="flex-1">
+                            <h5 class="text-sm font-bold text-white">e) Sistema de Extracción</h5>
+                            <span class="text-[11px] text-slate-400">Bomba de agua y canilla para riego</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-5 h-5 text-slate-600"></i>
+                    </button>
+
+                    <!-- Step 6 -->
+                    <button onclick="setArchStep(6)" id="arch-btn-6" class="w-full text-left p-4 rounded-2xl glass-panel border border-slate-800 hover:border-celeste-500/40 transition flex items-center space-x-4">
+                        <div class="w-10 h-10 rounded-xl bg-slate-800 text-slate-300 font-bold flex items-center justify-center flex-shrink-0">
+                            F
+                        </div>
+                        <div class="flex-1">
+                            <h5 class="text-sm font-bold text-white">f) Módulo Monitoreo Arduino</h5>
+                            <span class="text-[11px] text-slate-400">Sensores de calidad e indicadores LED</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-5 h-5 text-slate-600"></i>
+                    </button>
+                </div>
+
+                <!-- Display Panel (Right 7 Cols) -->
+                <div class="lg:col-span-7">
+                    <div id="arch-details-card" class="glass-panel p-8 rounded-3xl border-2 border-verdeagua-500/30 min-h-[420px] flex flex-col justify-between">
+                        <!-- Dynamic details injected by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- DESGLOSE DE CAPAS EN 3D / INTERACTIVO VISUAL -->
+            <div class="mt-16 bg-slate-950 p-6 sm:p-10 rounded-3xl border border-slate-800">
+                <div class="text-center max-w-xl mx-auto mb-8">
+                    <span class="text-xs font-bold text-aquacyan-400 uppercase tracking-widest">Cámara Ecológica al Detalle</span>
+                    <h4 class="text-2xl font-bold text-white mt-1">Estratigrafía de Filtración Biotecnológica</h4>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Layer 1 -->
+                    <div class="glass-panel p-6 rounded-2xl border-t-4 border-amber-600 text-center">
+                        <div class="w-12 h-12 mx-auto rounded-full bg-amber-900/40 text-amber-400 flex items-center justify-center mb-4">
+                            <i data-lucide="mountain" class="w-6 h-6"></i>
+                        </div>
+                        <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-400 block">Capa Superior (Entrada)</span>
+                        <h5 class="text-lg font-bold text-white mt-1">1. Grava Mediana / Gruesa</h5>
+                        <p class="text-slate-400 text-xs mt-2">
+                            Grano: 10 - 20 mm. Retiene sedimentos pesados, partículas flotantes mayores y dispersa homogéneamente el flujo del efluente.
+                        </p>
+                    </div>
+
+                    <!-- Layer 2 -->
+                    <div class="glass-panel p-6 rounded-2xl border-t-4 border-celeste-400 text-center">
+                        <div class="w-12 h-12 mx-auto rounded-full bg-celeste-900/40 text-celeste-400 flex items-center justify-center mb-4">
+                            <i data-lucide="sparkle" class="w-6 h-6"></i>
+                        </div>
+                        <span class="text-[10px] font-extrabold uppercase tracking-wider text-celeste-400 block">Capa Intermedia</span>
+                        <h5 class="text-lg font-bold text-white mt-1">2. Arena Lavada de Rigo</h5>
+                        <p class="text-slate-400 text-xs mt-2">
+                            Grano fino: 0.5 - 2 mm. Filtración física profunda para atrapamiento de suspendidos micros, turbidez y clarificación del efluente.
+                        </p>
+                    </div>
+
+                    <!-- Layer 3 -->
+                    <div class="glass-panel p-6 rounded-2xl border-t-4 border-verdeagua-400 text-center">
+                        <div class="w-12 h-12 mx-auto rounded-full bg-verdeagua-900/40 text-verdeagua-400 flex items-center justify-center mb-4">
+                            <i data-lucide="flame" class="w-6 h-6"></i>
+                        </div>
+                        <span class="text-[10px] font-extrabold uppercase tracking-wider text-verdeagua-400 block">Capa Inferior (Salida)</span>
+                        <h5 class="text-lg font-bold text-white mt-1">3. Carbón Activado Vegetal</h5>
+                        <p class="text-slate-400 text-xs mt-2">
+                            Micro-poroso. Adsorción química activa, eliminación de pigmentos, olores fétidos residuales y cloro o compuestos tóxicos.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INTERACTIVE FEATURE 1: SIMULADOR DE FLUJO DE AGUA RESIDUAL -->
+    <section id="simulador" class="py-20 border-b border-slate-800 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="px-3 py-1 rounded-full bg-celeste-500/20 text-celeste-300 text-xs font-bold uppercase tracking-widest border border-celeste-500/30">
+                    Herramienta Interactiva N.º 1
+                </span>
+                <h3 class="text-3xl sm:text-4xl font-black text-white mt-3">Simulador Virtual del Proceso de Depuración</h3>
+                <p class="text-slate-400 text-sm mt-2">
+                    Inicia la simulación para observar la evolución fisicoquímica del agua desde efluente sucio hasta agua apta para riego.
+                </p>
+            </div>
+
+            <!-- Simulator Interactive Container -->
+            <div class="glass-panel p-6 sm:p-10 rounded-3xl border-2 border-celeste-500/30 shadow-2xl relative overflow-hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <!-- Controls & Parameters (Left 4 Cols) -->
+                    <div class="lg:col-span-4 space-y-6">
+                        <div class="bg-slate-900/90 p-5 rounded-2xl border border-slate-800 space-y-4">
+                            <h4 class="text-sm font-bold text-white uppercase tracking-wider flex items-center space-x-2">
+                                <i data-lucide="sliders" class="w-4 h-4 text-celeste-400"></i>
+                                <span>Ajustes del Simulador</span>
+                            </h4>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Volumen a Procesar (Litros)</label>
+                                <input type="range" id="sim-volume" min="50" max="500" value="200" class="w-full accent-celeste-500 cursor-pointer" oninput="updateSimVolume(this.value)">
+                                <div class="flex justify-between text-[11px] text-slate-400 mt-1">
+                                    <span>50 L</span>
+                                    <span id="sim-volume-val" class="text-celeste-300 font-bold">200 Litros</span>
+                                    <span>500 L</span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Nivel de Sólidos Contaminantes</label>
+                                <select id="sim-dirt-level" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-celeste-500">
+                                    <option value="high">Alto (Efluente Cloacal Mixto)</option>
+                                    <option value="medium" selected>Medio (Agua Gris Domiciliaria)</option>
+                                    <option value="low">Bajo (Agua de Lavadero)</option>
+                                </select>
+                            </div>
+
+                            <button id="sim-start-btn" onclick="startWaterSimulation()" class="w-full py-3 rounded-xl bg-gradient-celeste-verde text-slate-950 font-black text-sm shadow-lg shadow-verdeagua-500/20 hover:opacity-95 transition">
+                                <i data-lucide="play" class="w-4 h-4 inline-block mr-1"></i> Iniciar Flujo de Tratamiento
+                            </button>
+                        </div>
+
+                        <!-- Realtime Indicators -->
+                        <div class="grid grid-cols-2 gap-3 text-center">
+                            <div class="p-3 bg-slate-900/70 rounded-xl border border-slate-800">
+                                <span class="text-[10px] uppercase font-bold text-slate-400 block">Turbidez Actual</span>
+                                <span id="sim-turbidity-display" class="text-lg font-black text-amber-400">450 NTU</span>
+                            </div>
+                            <div class="p-3 bg-slate-900/70 rounded-xl border border-slate-800">
+                                <span class="text-[10px] uppercase font-bold text-slate-400 block">Pureza del Agua</span>
+                                <span id="sim-purity-display" class="text-lg font-black text-red-400">12 %</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Visual Flow Display (Right 8 Cols) -->
+                    <div class="lg:col-span-8 space-y-6">
+                        <!-- Water Visual Tube -->
+                        <div class="relative bg-slate-950 h-36 rounded-2xl border-2 border-slate-800 overflow-hidden p-3 flex items-center justify-between">
+                            <!-- Background Grid -->
+                            <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:16px_16px]"></div>
+
+                            <!-- Stage 1 Visual -->
+                            <div class="relative z-10 text-center w-1/4">
+                                <div id="sim-box-1" class="w-14 h-14 mx-auto rounded-xl bg-amber-950/80 border-2 border-amber-600 flex items-center justify-center text-amber-400 transition-all duration-500">
+                                    <i data-lucide="alert-circle" class="w-7 h-7"></i>
+                                </div>
+                                <span class="text-[11px] font-bold text-slate-300 mt-2 block">1. Biodigestor</span>
+                                <span id="sim-status-1" class="text-[9px] text-amber-400">En espera</span>
+                            </div>
+
+                            <div class="h-1 flex-1 bg-slate-800 relative overflow-hidden">
+                                <div id="sim-pipe-1" class="h-full bg-amber-600 w-0 transition-all duration-700"></div>
+                            </div>
+
+                            <!-- Stage 2 Visual -->
+                            <div class="relative z-10 text-center w-1/4">
+                                <div id="sim-box-2" class="w-14 h-14 mx-auto rounded-xl bg-slate-900 border-2 border-slate-700 flex items-center justify-center text-slate-500 transition-all duration-500">
+                                    <i data-lucide="filter" class="w-7 h-7"></i>
+                                </div>
+                                <span class="text-[11px] font-bold text-slate-300 mt-2 block">2. Filtro Capas</span>
+                                <span id="sim-status-2" class="text-[9px] text-slate-500">En espera</span>
+                            </div>
+
+                            <div class="h-1 flex-1 bg-slate-800 relative overflow-hidden">
+                                <div id="sim-pipe-2" class="h-full bg-celeste-500 w-0 transition-all duration-700"></div>
+                            </div>
+
+                            <!-- Stage 3 Visual -->
+                            <div class="relative z-10 text-center w-1/4">
+                                <div id="sim-box-3" class="w-14 h-14 mx-auto rounded-xl bg-slate-900 border-2 border-slate-700 flex items-center justify-center text-slate-500 transition-all duration-500">
+                                    <i data-lucide="check-circle-2" class="w-7 h-7"></i>
+                                </div>
+                                <span class="text-[11px] font-bold text-slate-300 mt-2 block">3. Tanque PVC</span>
+                                <span id="sim-status-3" class="text-[9px] text-slate-500">En espera</span>
+                            </div>
+                        </div>
+
+                        <!-- Progress Information Box -->
+                        <div class="bg-slate-900/80 p-5 rounded-2xl border border-slate-800">
+                            <div class="flex items-center justify-between mb-2">
+                                <span id="sim-step-title" class="text-xs font-bold text-celeste-400 uppercase tracking-wider">Estado: Listo para comenzar</span>
+                                <span id="sim-progress-percent" class="text-xs font-extrabold text-verdeagua-400">0%</span>
+                            </div>
+                            <div class="w-full bg-slate-950 h-3 rounded-full overflow-hidden mb-3 border border-slate-800">
+                                <div id="sim-progress-bar" class="bg-gradient-celeste-verde h-full w-0 transition-all duration-300"></div>
+                            </div>
+                            <p id="sim-step-desc" class="text-slate-300 text-xs leading-relaxed">
+                                Presiona "Iniciar Flujo de Tratamiento" para ver la degradación biológica y eliminación de patógenos en tiempo real.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INTERACTIVE FEATURE 2: EVALUADOR / CALCULADORA SANITARIA DE REÚSO -->
+    <section id="calculadora" class="py-20 border-b border-slate-800 bg-slate-900/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="px-3 py-1 rounded-full bg-verdeagua-500/20 text-verdeagua-300 text-xs font-bold uppercase tracking-widest border border-verdeagua-500/30">
+                    Herramienta Interactiva N.º 2
+                </span>
+                <h3 class="text-3xl sm:text-4xl font-black text-white mt-3">Evaluadora Sanitaria de Aptitud para Riego</h3>
+                <p class="text-slate-400 text-sm mt-2">
+                    Ingresa los parámetros fisicoquímicos para determinar si el efluente cumple las normas higiénicas de reutilización hídrica.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <!-- Inputs (Left 6 Cols) -->
+                <div class="lg:col-span-6 glass-panel p-6 sm:p-8 rounded-3xl border border-slate-800 space-y-5">
+                    <h4 class="text-base font-bold text-white flex items-center space-x-2">
+                        <i data-lucide="flask-conical" class="w-5 h-5 text-verdeagua-400"></i>
+                        <span>Ingreso de Parámetros Medidos</span>
+                    </h4>
+
+                    <!-- Input 1: pH -->
+                    <div>
+                        <div class="flex justify-between text-xs font-semibold mb-1">
+                            <label class="text-slate-300">Nivel de pH (Acidez / Alcalinidad)</label>
+                            <span id="calc-ph-val" class="text-celeste-400 font-bold">7.2</span>
+                        </div>
+                        <input type="range" id="input-ph" min="4.0" max="10.0" step="0.1" value="7.2" class="w-full accent-celeste-500 cursor-pointer" oninput="calculateSanitaryAptitude()">
+                        <div class="flex justify-between text-[10px] text-slate-500 mt-0.5">
+                            <span>4.0 (Muy Ácido)</span>
+                            <span>7.0 (Neutro Óptimo)</span>
+                            <span>10.0 (Muy Alcalino)</span>
+                        </div>
+                    </div>
+
+                    <!-- Input 2: Turbidez (NTU) -->
+                    <div>
+                        <div class="flex justify-between text-xs font-semibold mb-1">
+                            <label class="text-slate-300">Turbidez residual (NTU)</label>
+                            <span id="calc-ntu-val" class="text-verdeagua-400 font-bold">12 NTU</span>
+                        </div>
+                        <input type="range" id="input-ntu" min="1" max="150" step="1" value="12" class="w-full accent-verdeagua-500 cursor-pointer" oninput="calculateSanitaryAptitude()">
+                        <div class="flex justify-between text-[10px] text-slate-500 mt-0.5">
+                            <span>1 NTU (Cristalino)</span>
+                            <span>&lt; 20 NTU (Apto Riego)</span>
+                            <span>150 NTU (Muy Turbio)</span>
+                        </div>
+                    </div>
+
+                    <!-- Input 3: Olor y Color -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Percepción Organoléptica (Olor/Color)</label>
+                        <select id="input-sensory" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-verdeagua-500" onchange="calculateSanitaryAptitude()">
+                            <option value="inodoro">Inodoro y Incoloro (Óptimo)</option>
+                            <option value="leve">Leve olor a tierra / Transparente</option>
+                            <option value="fuerte">Olor sulfuroso o tonalidad turbia</option>
+                        </select>
+                    </div>
+
+                    <!-- Input 4: Uso propuesto -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Destino Final del Agua</label>
+                        <select id="input-use" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-verdeagua-500" onchange="calculateSanitaryAptitude()">
+                            <option value="gardens">Riego de Jardines y Césped Ornamental</option>
+                            <option value="trees">Riego de Arbolado y Frutales High-Stem</option>
+                            <option value="crops">Riego de Verduras de Hoja Directa (Requiere Mayor Exigencia)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Results Output Card (Right 6 Cols) -->
+                <div class="lg:col-span-6">
+                    <div id="calc-result-box" class="glass-panel p-6 sm:p-8 rounded-3xl border-2 border-verdeagua-500/40 bg-verdeagua-500/10 min-h-[380px] flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-xs font-extrabold uppercase tracking-widest text-verdeagua-400">Dictamen Sanitario</span>
+                                <span id="calc-badge" class="px-3 py-1 rounded-full bg-verdeagua-500 text-slate-950 font-black text-xs">APTO PARA RIEGO</span>
+                            </div>
+
+                            <h4 id="calc-title" class="text-2xl font-black text-white mb-2">Excelente Calidad Depurada</h4>
+                            <p id="calc-desc" class="text-slate-300 text-xs sm:text-sm leading-relaxed mb-6">
+                                Los niveles de pH y turbidez registrados están dentro del rango seguro según los estándares internacionales para reutilización hídrica no potabilizada.
+                            </p>
+
+                            <!-- Metrics list -->
+                            <div class="space-y-3 bg-slate-950/60 p-4 rounded-2xl border border-slate-800 text-xs">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-400">Riesgo Biológico de Infiltración:</span>
+                                    <span id="calc-metric-risk" class="text-verdeagua-300 font-bold">Muy Bajo (0.01%)</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-400">Ahorro Hídrico Estimado:</span>
+                                    <span class="text-celeste-300 font-bold">~ 1,200 Litros / Mes</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-400">Protección de Napas:</span>
+                                    <span class="text-verdeagua-400 font-bold">100% Efectiva</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 pt-4 border-t border-slate-800/80 text-[11px] text-slate-400">
+                            <i data-lucide="info" class="w-4 h-4 inline-block mr-1 text-celeste-400"></i>
+                            <span>Evaluación generada con la matriz algorítmica oficial del proyecto BIONEX.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INTERACTIVE FEATURE 3: MONITOR VIRTUAL ARDUINO EN TIEMPO REAL -->
+    <section id="monitor" class="py-20 border-b border-slate-800 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-celeste-500/20 text-celeste-300 text-xs font-bold uppercase tracking-widest border border-celeste-500/30">
+                    <span class="w-2 h-2 rounded-full bg-celeste-400 animate-pulse"></span>
+                    <span>Módulo de Telemetría Electrónica</span>
+                </div>
+                <h3 class="text-3xl sm:text-4xl font-black text-white mt-3">Monitor Virtual de Sensores Arduino</h3>
+                <p class="text-slate-400 text-sm mt-2">
+                    Simulación del sistema embebido Arduino Uno acoplado a sensores de pH, turbidez analógica y ultrasonido HC-SR04 de nivel de estanque.
+                </p>
+            </div>
+
+            <!-- Arduino Live Dashboard -->
+            <div class="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-800 space-y-8">
+                <!-- Top Status Bar -->
+                <div class="flex flex-wrap items-center justify-between gap-4 bg-slate-950 p-4 rounded-2xl border border-slate-800">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-3 h-3 rounded-full bg-verdeagua-400 animate-ping"></div>
+                        <span class="text-xs font-bold text-white uppercase tracking-wider">Arduino Uno R3: CONECTADO (COM4 - 9600 BAUD)</span>
+                    </div>
+
+                    <div class="flex items-center space-x-2">
+                        <button onclick="toggleArduinoSimulation()" id="arduino-toggle-btn" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-celeste-500/20 text-celeste-300 border border-celeste-500/40 hover:bg-celeste-500/30 transition">
+                            <i data-lucide="pause" class="w-3.5 h-3.5 inline mr-1"></i> Pausar Captura
+                        </button>
+                        <button onclick="triggerSensorAnomaly()" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 hover:bg-amber-500/30 transition">
+                            Simular Anomalía
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3 Live Gauge Displays -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Sensor 1: pH Sensor -->
+                    <div class="bg-slate-900/80 p-5 rounded-2xl border border-slate-800 text-center">
+                        <div class="flex justify-between items-center text-xs text-slate-400 mb-2">
+                            <span>Sensor pH (DFRobot)</span>
+                            <span class="text-celeste-400 font-mono">Pin A0</span>
+                        </div>
+                        <div class="text-4xl font-black text-celeste-400 font-mono my-2" id="live-ph-val">7.15</div>
+                        <span class="text-[11px] text-slate-400">Rango Neutro Seguro (6.8 - 7.5)</span>
+                        <div class="w-full bg-slate-950 h-2 rounded-full mt-3 overflow-hidden">
+                            <div id="bar-ph" class="bg-celeste-400 h-full w-[70%] transition-all duration-500"></div>
+                        </div>
+                    </div>
+
+                    <!-- Sensor 2: Turbidity Sensor -->
+                    <div class="bg-slate-900/80 p-5 rounded-2xl border border-slate-800 text-center">
+                        <div class="flex justify-between items-center text-xs text-slate-400 mb-2">
+                            <span>Sensor Turbidez (TS-300B)</span>
+                            <span class="text-verdeagua-400 font-mono">Pin A1</span>
+                        </div>
+                        <div class="text-4xl font-black text-verdeagua-400 font-mono my-2" id="live-ntu-val">14.2 NTU</div>
+                        <span class="text-[11px] text-slate-400">Agua Clarificada Optima</span>
+                        <div class="w-full bg-slate-950 h-2 rounded-full mt-3 overflow-hidden">
+                            <div id="bar-ntu" class="bg-verdeagua-400 h-full w-[15%] transition-all duration-500"></div>
+                        </div>
+                    </div>
+
+                    <!-- Sensor 3: Ultrasonic Level Sensor -->
+                    <div class="bg-slate-900/80 p-5 rounded-2xl border border-slate-800 text-center">
+                        <div class="flex justify-between items-center text-xs text-slate-400 mb-2">
+                            <span>Nivel Estanque (HC-SR04)</span>
+                            <span class="text-aquacyan-400 font-mono">Pin D8/D9</span>
+                        </div>
+                        <div class="text-4xl font-black text-aquacyan-400 font-mono my-2" id="live-level-val">82 %</div>
+                        <span class="text-[11px] text-slate-400">Volumen Disponible: ~ 245 L</span>
+                        <div class="w-full bg-slate-950 h-2 rounded-full mt-3 overflow-hidden">
+                            <div id="bar-level" class="bg-aquacyan-400 h-full w-[82%] transition-all duration-500"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Realtime Chart Canvas -->
+                <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800">
+                    <h5 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-4 flex items-center space-x-2">
+                        <i data-lucide="activity" class="w-4 h-4 text-verdeagua-400"></i>
+                        <span>Lectura Dinámica de Parámetros en Tiempo Real (Últimos 30 Segundos)</span>
+                    </h5>
+                    <div class="h-64 w-full">
+                        <canvas id="arduinoChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 6: CRONOGRAMA DE ACTIVIDADES (8 SEMANAS) -->
+    <section id="cronograma" class="py-20 border-b border-slate-800/80 bg-slate-900/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <h2 class="text-xs uppercase font-extrabold tracking-widest text-verdeagua-400 mb-2">05. Planificación Temporal</h2>
+                <h3 class="text-3xl sm:text-4xl font-bold text-white">Cronograma de Ejecución (8 Semanas)</h3>
+                <p class="text-slate-400 mt-3 text-sm">
+                    Haz clic en cada semana para desplegar el desglose detallado de actividades técnicas desarrolladas por el equipo.
+                </p>
+            </div>
+
+            <!-- Week Filter Buttons Selector -->
+            <div class="flex flex-wrap justify-center gap-2 mb-10" id="week-buttons-container">
+                <!-- Buttons injected via JS -->
+            </div>
+
+            <!-- Dynamic Week Details Panel -->
+            <div id="week-detail-panel" class="glass-panel p-8 rounded-3xl border-2 border-verdeagua-500/30 relative overflow-hidden transition-all duration-300">
+                <!-- Content dynamically injected by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 7: LOCALIZACIÓN FÍSICA Y MAQUETA -->
+    <section id="localizacion" class="py-20 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <!-- Text Details -->
+                <div class="lg:col-span-6 space-y-6">
+                    <h2 class="text-xs uppercase font-extrabold tracking-widest text-celeste-400">06. Criterios de Emplazamiento</h2>
+                    <h3 class="text-3xl sm:text-4xl font-bold text-white">Localización Física del Proyecto</h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        El proyecto establece pautas estrictas de localización tanto para su prueba técnica en maqueta como para la implementación en terreno real, garantizando la bioseguridad del entorno.
+                    </p>
+
+                    <div class="space-y-4">
+                        <div class="glass-panel p-4 rounded-2xl border border-slate-800 flex items-start space-x-3">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-verdeagua-400 flex-shrink-0 mt-0.5"></i>
+                            <div>
+                                <h5 class="text-sm font-bold text-white">Pendiente Topográfica del Terreno</h5>
+                                <p class="text-slate-400 text-xs mt-0.5">Pendiente mínima del 2% para garantizar el flujo por gravedad libre de estancamientos desde la vivienda al biodigestor.</p>
+                            </div>
+                        </div>
+
+                        <div class="glass-panel p-4 rounded-2xl border border-slate-800 flex items-start space-x-3">
+                            <i data-lucide="shield-alert" class="w-5 h-5 text-celeste-400 flex-shrink-0 mt-0.5"></i>
+                            <div>
+                                <h5 class="text-sm font-bold text-white">Distancia de Seguridad a Pozos de Agua Potable</h5>
+                                <p class="text-slate-400 text-xs mt-0.5">Distancia mínima reglamentaria de 15 metros de cualquier fuente de captación hídrica o perforación subterránea.</p>
+                            </div>
+                        </div>
+
+                        <div class="glass-panel p-4 rounded-2xl border border-slate-800 flex items-start space-x-3">
+                            <i data-lucide="box" class="w-5 h-5 text-aquacyan-400 flex-shrink-0 mt-0.5"></i>
+                            <div>
+                                <h5 class="text-sm font-bold text-white">Diferencia entre Maqueta y Proyecto Real</h5>
+                                <p class="text-slate-400 text-xs mt-0.5">La maqueta utiliza recipientes reducidos de demostración y simulación electrónica, mientras que el sistema real emplea cámaras subterráneas de hormigón armado y depósitos de PVC de alta densidad.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Graphic Location Mockup Card -->
+                <div class="lg:col-span-6">
+                    <div class="glass-panel p-6 sm:p-8 rounded-3xl border border-verdeagua-500/30 text-center relative overflow-hidden">
+                        <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 space-y-4">
+                            <div class="flex justify-between items-center text-xs border-b border-slate-800 pb-3">
+                                <span class="font-bold text-white uppercase">Esquema Topográfico Recomendado</span>
+                                <span class="text-verdeagua-400 font-semibold">Norma Sanitaria ISO</span>
+                            </div>
+
+                            <div class="py-8 space-y-4">
+                                <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 text-left text-xs">
+                                    <span class="text-slate-400 font-bold block">1. Zona Residencial Domiciliaria</span>
+                                    <span class="text-slate-300">Generación de Aguas Grises y Negras</span>
+                                </div>
+
+                                <div class="flex justify-center text-celeste-400 my-1">
+                                    <i data-lucide="arrow-down" class="w-6 h-6 animate-bounce"></i>
+                                </div>
+
+                                <div class="p-3 rounded-xl bg-celeste-950/60 border border-celeste-500/30 text-left text-xs">
+                                    <span class="text-celeste-300 font-bold block">2. Zona Subterránea BIONEX (A >15m de pozo)</span>
+                                    <span class="text-slate-300">Biodigestión + Filtro Tripartito Hermético</span>
+                                </div>
+
+                                <div class="flex justify-center text-verdeagua-400 my-1">
+                                    <i data-lucide="arrow-down" class="w-6 h-6 animate-bounce"></i>
+                                </div>
+
+                                <div class="p-3 rounded-xl bg-verdeagua-950/60 border border-verdeagua-500/30 text-left text-xs">
+                                    <span class="text-verdeagua-300 font-bold block">3. Zona de Reúso Agro-Superficial</span>
+                                    <span class="text-slate-300">Tanque de almacenamiento + Riego por goteo o aspersión</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 8: EQUIPO DE TRABAJO -->
+    <section id="equipo" class="py-20 border-b border-slate-800 bg-slate-900/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-xs uppercase font-extrabold tracking-widest text-verdeagua-400 mb-2">07. Capital Humano</h2>
+                <h3 class="text-3xl sm:text-4xl font-bold text-white">Equipo Técnico de Trabajo</h3>
+                <p class="text-slate-400 mt-3 text-sm">
+                    Estudiantes y orientación docente de la Escuela de Educación Secundaria Técnica N.º 2 (EEST N.º 2).
+                </p>
+            </div>
+
+            <!-- Presenter / Mentor Card -->
+            <div class="mb-12 glass-panel p-8 rounded-3xl border-2 border-celeste-500/30 max-w-3xl mx-auto text-center relative overflow-hidden">
+                <div class="w-20 h-20 mx-auto rounded-2xl bg-gradient-celeste-verde p-0.5 mb-4 shadow-xl">
+                    <div class="w-full h-full bg-[#081225] rounded-[14px] flex items-center justify-center text-celeste-400">
+                        <i data-lucide="user-check" class="w-10 h-10"></i>
+                    </div>
+                </div>
+                <span class="text-xs font-extrabold uppercase tracking-widest text-celeste-400 block mb-1">Presentación & Orientación Docente</span>
+                <h4 class="text-2xl font-bold text-white">Isabel Mercado | Liceria & Co.</h4>
+                <p class="text-slate-300 text-xs mt-2 max-w-lg mx-auto">
+                    Coordinación metodológica, supervisión del informe técnico y representación institucional del proyecto BIONEX.
+                </p>
+            </div>
+
+            <!-- 5 Student Team Members Grid -->
+            <h4 class="text-lg font-bold text-white mb-6 text-center">Integrantes Desarrolladores (EEST N.º 2)</h4>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+                <!-- Member 1 -->
+                <div class="glass-panel p-5 rounded-2xl text-center glass-panel-hover border border-slate-800">
+                    <div class="w-14 h-14 mx-auto rounded-full bg-slate-800 flex items-center justify-center text-verdeagua-400 mb-3">
+                        <i data-lucide="user" class="w-7 h-7"></i>
+                    </div>
+                    <h5 class="text-sm font-bold text-white">Mansilla Rocío</h5>
+                    <span class="text-[11px] text-verdeagua-300 block font-medium mt-1">Investigación Química</span>
+                    <p class="text-[10px] text-slate-400 mt-2">Análisis de capas filtrantes y dosificación de carbón activado.</p>
+                </div>
+
+                <!-- Member 2 -->
+                <div class="glass-panel p-5 rounded-2xl text-center glass-panel-hover border border-slate-800">
+                    <div class="w-14 h-14 mx-auto rounded-full bg-slate-800 flex items-center justify-center text-celeste-400 mb-3">
+                        <i data-lucide="user" class="w-7 h-7"></i>
+                    </div>
+                    <h5 class="text-sm font-bold text-white">Núñez Sara</h5>
+                    <span class="text-[11px] text-celeste-300 block font-medium mt-1">Diseño Hidráulico</span>
+                    <p class="text-[10px] text-slate-400 mt-2">Cálculo de pendientes, cañerías PVC y hermetismo de cámara.</p>
+                </div>
+
+                <!-- Member 3 -->
+                <div class="glass-panel p-5 rounded-2xl text-center glass-panel-hover border border-slate-800">
+                    <div class="w-14 h-14 mx-auto rounded-full bg-slate-800 flex items-center justify-center text-aquacyan-400 mb-3">
+                        <i data-lucide="user" class="w-7 h-7"></i>
+                    </div>
+                    <h5 class="text-sm font-bold text-white">Penayo Laura</h5>
+                    <span class="text-[11px] text-aquacyan-300 block font-medium mt-1">Programación Arduino</span>
+                    <p class="text-[10px] text-slate-400 mt-2">Calibración de sensores analógicos de pH y código C++.</p>
+                </div>
+
+                <!-- Member 4 -->
+                <div class="glass-panel p-5 rounded-2xl text-center glass-panel-hover border border-slate-800">
+                    <div class="w-14 h-14 mx-auto rounded-full bg-slate-800 flex items-center justify-center text-verdeagua-400 mb-3">
+                        <i data-lucide="user" class="w-7 h-7"></i>
+                    </div>
+                    <h5 class="text-sm font-bold text-white">Casado Bautista</h5>
+                    <span class="text-[11px] text-verdeagua-300 block font-medium mt-1">Montaje Mecánico</span>
+                    <p class="text-[10px] text-slate-400 mt-2">Ensamble de la estructura física y sistema de bombeo.</p>
+                </div>
+
+                <!-- Member 5 -->
+                <div class="glass-panel p-5 rounded-2xl text-center glass-panel-hover border border-slate-800 sm:col-span-2 lg:col-span-1">
+                    <div class="w-14 h-14 mx-auto rounded-full bg-slate-800 flex items-center justify-center text-celeste-400 mb-3">
+                        <i data-lucide="user" class="w-7 h-7"></i>
+                    </div>
+                    <h5 class="text-sm font-bold text-white">Ruíz Thiago</h5>
+                    <span class="text-[11px] text-celeste-300 block font-medium mt-1">Construcción Maqueta</span>
+                    <p class="text-[10px] text-slate-400 mt-2">Modelado a escala 1:10 y preparación de acabados estéticos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 9: RECURSOS DESGLOSADOS Y CATEGORIZADOS -->
+    <section id="recursos" class="py-20 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-xs uppercase font-extrabold tracking-widest text-celeste-400 mb-2">08. Materiales y Presupuesto</h2>
+                <h3 class="text-3xl sm:text-4xl font-bold text-white">Recursos Clasificados del Proyecto</h3>
+                <p class="text-slate-400 mt-3 text-sm">
+                    Inventario completo de insumos requeridos para el prototipo funcional y la maqueta física.
+                </p>
+            </div>
+
+            <!-- Categories Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Category 1: Materiales del Sistema Real -->
+                <div class="glass-panel p-6 rounded-2xl border border-slate-800 space-y-4">
+                    <div class="flex items-center space-x-3 text-celeste-400">
+                        <i data-lucide="wrench" class="w-6 h-6"></i>
+                        <h4 class="text-base font-bold text-white">Sistema Real</h4>
+                    </div>
+                    <ul class="space-y-2 text-xs text-slate-300">
+                        <li class="flex items-center space-x-2">
+                            <i data-lucide="check" class="w-3.5 h-3.5 text-celeste-400"></i>
+                            <span>Biodigestor 600L estanco</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i data-lucide="check" class="w-3.5 h-3.5 text-celeste-400"></i>
+                            <span>Tuberías y accesorios PVC 110mm</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i data-lucide="check" class="w-3.5 h-3.5 text-celeste-400"></i>
+                            <span>Cámara de hormigón premoldeado</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i data-lucide="check" class="w-3.5 h-3.5 text-celeste-400"></i>
+                            <span>Grava, Arena lavada y Carbón</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i data-lucide="check" class="w-3.5 h-3.5 text-celeste-400"></i>
+                            <span>Electrobomba periférica 0.5 HP</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Category 2: Recursos Tecnológicos -->
+                <div class="glass-panel p-6 rounded-2xl border border-slate-800 space-y-4">
+                    <div class="flex items-center space-x-3 text-verdeagua-400">
+                        <i data-lucide="cpu" class="w-6 h-6"></i>
+                        <h4 class="text-base font-bold text-white">Tecnología</h4>
+                    </div>
+                    <ul class="space-y-2 text-xs text-slate-300">
+                        <li class="flex items-center space-x-2">
+                            <i data-lucide="check" class="w-3.5 h-3.5 text-verdeagua-400"></i>
+                            <span>Placa Arduino Uno R3</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i data-lucide="check" class="w-3.5 h-3.5 text-verdeagua-400"></i>
+                            <span>Sensor pH analógico graduado</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i data-lucide="check" class="w-3.5 h-3.5 text-verdeagua-400"></i>
+                            <span>Sensor de Turbidez óptica</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i data-lucide="check" class="w-3.5 h-3.5 text-verdeagua-400"></i>
+                            <span>Sensor Ultrasónico HC-SR04</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i data-lucide="check" class="w-3.5 h-3.5 text-verdeagua-400"></i>
+                            <span>Cables Dupont, LCD y LED alerts</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Category 3: Materiales Maqueta -->
+                <div class="glass-panel p-6 rounded-2xl border border-slate-800 space-y-4">
+                    <div class="flex items-center space-x-3 text-aquacyan-400">
+                        <i data-lucide="box" class="w-6 h-6"></i>
+                        <h4 class="text-base font-bold text-white">Maqueta A Escala</h4>
+                    </div>
+                    <ul class="space-y-2 text-xs text-slate-300">
+                        <li class="flex items-center space-x-2">
+                            <i data-lucide="check" class="w-3.5 h-3.5 text-aquacyan-400"></i>
+                            <span>Base de madera MDF / Cartón prensado</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i data-lucide="check" class="w-3.5 h-3.5 text-aquacyan-400"></i>
+                            <span>Recipientes traslúcidos PET</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i data-lucide="check" class="w-3.5 h-3.5 text-aquacyan-400"></i>
+                            <span>Mini bomba sumergible 5V</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i data-lucide="check" class="w-3.5 h-3.5 text-aquacyan-400"></i>
+                            <span>Pintura acrílica gris y verde menta</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i data-lucide="check" class="w-3.5 h-3.5 text-aquacyan-400"></i>
+                            <span>Micro mangueras de acuario</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Category 4: Humanos y Económicos -->
+                <div class="glass-panel p-6 rounded-2xl border border-slate-800 space-y-4">
+                    <div class="flex items-center space-x-3 text-celeste-400">
+                        <i data-lucide="users-2" class="w-6 h-6"></i>
+                        <h4 class="text-base font-bold text-white">Humanos / Gestión</h4>
+                    </div>
+                    <ul class="space-y-2 text-xs text-slate-300">
+                        <li class="flex items-center space-x-2">
+                            <i data-lucide="check" class="w-3.5 h-3.5 text-celeste-400"></i>
+                            <span>5 Estudiantes EEST N.º 2</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i data-lucide="check" class="w-3.5 h-3.5 text-celeste-400"></i>
+                            <span>Asesoría docente Isabel Mercado</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i data-lucide="check" class="w-3.5 h-3.5 text-celeste-400"></i>
+                            <span>Presupuesto institucional autogestionado</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i data-lucide="check" class="w-3.5 h-3.5 text-celeste-400"></i>
+                            <span>Talleres de laboratorio escolar</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 10: BENEFICIARIOS Y CONCLUSIÓN -->
+    <section class="py-20 border-b border-slate-800 bg-slate-900/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <!-- Left Beneficiarios -->
+                <div class="lg:col-span-6 space-y-6">
+                    <h2 class="text-xs uppercase font-extrabold tracking-widest text-verdeagua-400">09. Impacto Social y Ambiental</h2>
+                    <h3 class="text-3xl sm:text-4xl font-bold text-white">Beneficiarios Directos e Indirectos</h3>
+
+                    <div class="space-y-4">
+                        <div class="p-5 rounded-2xl glass-panel border-l-4 border-celeste-500">
+                            <h4 class="text-base font-bold text-white">Familias Rurales y Periurbanas</h4>
+                            <p class="text-slate-300 text-xs mt-1">Acceso inmediato a una solución sanitaria digna, eliminando riesgos de enfermedades hídricas y reduciendo costos recurrentes de desagote.</p>
+                        </div>
+
+                        <div class="p-5 rounded-2xl glass-panel border-l-4 border-verdeagua-500">
+                            <h4 class="text-base font-bold text-white">Ecosistema Comunitaria y Napas</h4>
+                            <p class="text-slate-300 text-xs mt-1">Preservación directa del agua subterránea que alimenta pozos de agua potable vecinales y erradicación de vectores (mosquitos y roedores).</p>
+                        </div>
+
+                        <div class="p-5 rounded-2xl glass-panel border-l-4 border-aquacyan-500">
+                            <h4 class="text-base font-bold text-white">Comunidad Educativa (EEST N.º 2)</h4>
+                            <p class="text-slate-300 text-xs mt-1">Aprendizaje significativo en biotecnología aplicada, desarrollo de software embebido y compromiso socioambiental práctico.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Conclusion Banner Box -->
+                <div class="lg:col-span-6">
+                    <div class="glass-panel p-8 sm:p-10 rounded-3xl border-2 border-verdeagua-500/40 bg-gradient-celeste-verde-soft relative overflow-hidden">
+                        <div class="text-center space-y-4">
+                            <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-celeste-verde flex items-center justify-center text-slate-950 font-black shadow-xl">
+                                <i data-lucide="award" class="w-8 h-8"></i>
+                            </div>
+
+                            <h4 class="text-2xl font-black text-white">Conclusión del Proyecto</h4>
+
+                            <p class="text-slate-200 text-xs sm:text-sm leading-relaxed">
+                                "El proyecto <strong>BIONEX</strong> demuestra fehacientemente que la articulación entre biotecnología accesible, concientización ecológica y electrónica embebida permite resolver problemáticas sanitarias estructurales. BIONEX transforma un pasivo ambiental en un activo hídrico renovable, forjando el camino hacia un futuro sustentable y más limpio."
+                            </p>
+
+                            <div class="pt-4 border-t border-slate-700/60 flex items-center justify-center space-x-3 text-xs text-verdeagua-300 font-semibold">
+                                <i data-lucide="check-circle-2" class="w-5 h-5 text-verdeagua-400"></i>
+                                <span>Proyecto Técnico Aprobado - EEST N.º 2</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-950 py-12 border-t border-slate-800 text-slate-400 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-celeste-verde p-0.5 flex items-center justify-center">
+                        <div class="w-full h-full bg-[#081225] rounded-[9px] flex items-center justify-center">
+                            <i data-lucide="droplet" class="w-5 h-5 text-verdeagua-400"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="text-lg font-black text-white">BIONEX</span>
+                        <span class="block text-[10px] text-slate-500">Innovación para un futuro más limpio</span>
+                    </div>
+                </div>
+
+                <div class="text-center md:text-right space-y-1">
+                    <p class="text-slate-300 font-medium">Presentado por: Isabel Mercado | Liceria & Co.</p>
+                    <p class="text-slate-500 text-[11px]">Desarrollado por el equipo de alumnos de EEST N.º 2</p>
+                    <p class="text-slate-600 text-[10px] pt-2">© 2026 BIONEX - Todos los derechos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC FOR INTERACTIVITY -->
+    <script>
+        // --- LUCIDE ICONS INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            initArchitectureDetails();
+            initCronogramaWeeks();
+            initArduinoChart();
+            calculateSanitaryAptitude();
+        });
+
+        // --- MOBILE MENU TOGGLE ---
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // --- SECTION 5: ARQUITECTURA DETALLES DINÁMICOS ---
+        const archStepsData = {
+            1: {
+                title: "a) Biodigestor Anaerobio Principal",
+                badge: "Etapa 1: Decantación y Biodigestión",
+                desc: "Tanque hermético estanco donde ingresan las aguas negras y grises. Los sólidos pesados sedimentan en el fondo formando lodos, mientras las bacterias anaerobias descomponen la materia orgánica reduciendo el DBO5 y coliformes.",
+                specs: ["Capacidad: 600 - 1200 Litros", "Retención: Anaerobia de alta densidad", "Accesorios: Trampa de grasas integrada"],
+                icon: "bug"
+            },
+            2: {
+                title: "b) Cámara de Inspección y Registro",
+                badge: "Etapa 2: Control e Inspección",
+                desc: "Dispositivo intermedio que permite verificar la fluidez del líquido clarificado procedente del biodigestor, tomar muestras directas para laboratorio e intervenir mecánicamente en caso de obstrucciones.",
+                specs: ["Material: Hormigón premoldeado o PVC", "Acceso: Tapa hermética extraíble", "Función: Mantenimiento y prevención"],
+                icon: "search"
+            },
+            3: {
+                title: "c) Cámara Ecológica de Filtrado Tripartita",
+                badge: "Etapa 3: Depuración Físico-Química",
+                desc: "Corazón purificador del sistema compuesto por tres estratos filtrantes: Grava superior (atrapamiento grueso), Arena lavada intermedia (filtración submicrónica) y Carbón activado vegetal inferior (adsorción de olores y toxinas).",
+                specs: ["Estrato 1: Grava (10-20mm)", "Estrato 2: Arena Lavada fina", "Estrato 3: Carbón Activado Vegetal"],
+                icon: "layers"
+            },
+            4: {
+                title: "d) Tanque de Almacenamiento PVC Chato",
+                badge: "Etapa 4: Acumulación de Agua Tratada",
+                desc: "Contenedor estanco horizontal de perfil bajo diseñado para recibir efluente 100% clarificado, garantizando su conservación estéril antes de ser impulsado al riego.",
+                specs: ["Material: PVC virgen apto efluentes", "Diseño: Chato anti-presión de suelo", "Protección: Sellado anti-mosquitos"],
+                icon: "database"
+            },
+            5: {
+                title: "e) Sistema de Extracción y Bombeo",
+                badge: "Etapa 5: Reúso y Distribución",
+                desc: "Módulo electromecánico compuesto por bomba periférica de impulsión acoplada a red de distribución y canilla para la conexión directa de mangueras de riego por goteo o aspersión.",
+                specs: ["Bomba: Electrobomba 0.5 HP", "Salida: Canilla esférica 3/4\"", "Aplicación: Riego agrícola/jardines"],
+                icon: "droplet"
+            },
+            6: {
+                title: "f) Módulo de Monitoreo Arduino",
+                badge: "Etapa 6: Control Electrónico",
+                desc: "Sistema inteligente embebido basado en microcontrolador Arduino Uno. Procesa lecturas continuas de pH, turbidez y nivel hídrico, activando alertas ópticas LED según el estado de pureza del agua.",
+                specs: ["Controlador: Arduino Uno R3", "Sensores: pH + Turbidez + HC-SR04", "Salida: Alertas visuales / Pantalla LCD"],
+                icon: "cpu"
+            }
+        };
+
+        function setArchStep(stepNum) {
+            // Update buttons styling
+            for (let i = 1; i <= 6; i++) {
+                const btn = document.getElementById(`arch-btn-${i}`);
+                if (i === stepNum) {
+                    btn.className = "w-full text-left p-4 rounded-2xl glass-panel border border-verdeagua-500/50 bg-verdeagua-500/10 transition flex items-center space-x-4";
+                } else {
+                    btn.className = "w-full text-left p-4 rounded-2xl glass-panel border border-slate-800 hover:border-celeste-500/40 transition flex items-center space-x-4";
+                }
+            }
+
+            // Update content card
+            const data = archStepsData[stepNum];
+            const card = document.getElementById('arch-details-card');
+            card.innerHTML = `
+                <div>
+                    <span class="px-3 py-1 rounded-full bg-verdeagua-500/20 text-verdeagua-300 text-xs font-bold uppercase tracking-widest border border-verdeagua-500/30">
+                        ${data.badge}
+                    </span>
+                    <h4 class="text-2xl font-bold text-white mt-4 mb-3">${data.title}</h4>
+                    <p class="text-slate-300 text-sm leading-relaxed mb-6">${data.desc}</p>
+                    
+                    <div class="space-y-2 bg-slate-950/80 p-4 rounded-2xl border border-slate-800">
+                        <span class="text-xs font-bold text-celeste-400 uppercase tracking-wider block mb-2">Especificaciones Técnicas:</span>
+                        ${data.specs.map(s => `
+                            <div class="flex items-center space-x-2 text-xs text-slate-300">
+                                <i data-lucide="check-circle" class="w-4 h-4 text-verdeagua-400"></i>
+                                <span>${s}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div class="pt-6 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+                    <span>Etapa ${stepNum} de 6 del flujo BIONEX</span>
+                    <span class="text-verdeagua-400 font-semibold">Funcionamiento Hermético</span>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        function initArchitectureDetails() {
+            setArchStep(1);
+        }
+
+        // --- SIMULADOR INTERACTIVO LOGIC ---
+        let simInterval = null;
+
+        function updateSimVolume(val) {
+            document.getElementById('sim-volume-val').innerText = `${val} Litros`;
+        }
+
+        function startWaterSimulation() {
+            if (simInterval) clearInterval(simInterval);
+
+            const startBtn = document.getElementById('sim-start-btn');
+            startBtn.disabled = true;
+            startBtn.classList.add('opacity-50');
+
+            let progress = 0;
+            const progressBar = document.getElementById('sim-progress-bar');
+            const progressPercent = document.getElementById('sim-progress-percent');
+            const stepTitle = document.getElementById('sim-step-title');
+            const stepDesc = document.getElementById('sim-step-desc');
+            const turbidityDisp = document.getElementById('sim-turbidity-display');
+            const purityDisp = document.getElementById('sim-purity-display');
+
+            // Boxes
+            const box1 = document.getElementById('sim-box-1');
+            const box2 = document.getElementById('sim-box-2');
+            const box3 = document.getElementById('sim-box-3');
+            const pipe1 = document.getElementById('sim-pipe-1');
+            const pipe2 = document.getElementById('sim-pipe-2');
+
+            simInterval = setInterval(() => {
+                progress += 2;
+                progressBar.style.width = `${progress}%`;
+                progressPercent.innerText = `${progress}%`;
+
+                if (progress <= 35) {
+                    // Stage 1: Biodigestor
+                    stepTitle.innerText = "Etapa 1: Degradación Anaerobia en Biodigestor";
+                    stepDesc.innerText = "Los sólidos gruesos sedimentan. Microorganismos anaerobios descomponen la materia orgánica pesada.";
+                    box1.className = "w-14 h-14 mx-auto rounded-xl bg-amber-600 border-2 border-amber-400 flex items-center justify-center text-white scale-110 transition-all duration-300";
+                    pipe1.style.width = `${(progress / 35) * 100}%`;
+                    turbidityDisp.innerText = `${Math.round(450 - (progress * 5))} NTU`;
+                    purityDisp.innerText = `${Math.round(12 + (progress * 0.8))}%`;
+                } else if (progress <= 75) {
+                    // Stage 2: Filter
+                    stepTitle.innerText = "Etapa 2: Filtración por Grava, Arena y Carbón Activado";
+                    stepDesc.innerText = "El agua fluye a través de la estratigrafía ecológico-química. Se clarifica la turbidez fina y el carbón absorbe olores.";
+                    box2.className = "w-14 h-14 mx-auto rounded-xl bg-celeste-500 border-2 border-celeste-300 flex items-center justify-center text-slate-950 scale-110 transition-all duration-300";
+                    pipe2.style.width = `${((progress - 35) / 40) * 100}%`;
+                    turbidityDisp.innerText = `${Math.round(275 - ((progress - 35) * 6))} NTU`;
+                    purityDisp.innerText = `${Math.round(40 + ((progress - 35) * 1.2))}%`;
+                } else if (progress < 100) {
+                    // Stage 3: PVC Tank
+                    stepTitle.innerText = "Etapa 3: Almacenamiento Estanco de Agua Depurada";
+                    stepDesc.innerText = "El agua tratada ingresa al tanque PVC limpia, inodora y transparente, lista para impulsión con electrobomba.";
+                    box3.className = "w-14 h-14 mx-auto rounded-xl bg-verdeagua-500 border-2 border-verdeagua-300 flex items-center justify-center text-slate-950 scale-110 transition-all duration-300";
+                    turbidityDisp.innerText = `12 NTU`;
+                    purityDisp.innerText = `98 %`;
+                } else {
+                    // Finish
+                    clearInterval(simInterval);
+                    stepTitle.innerText = "Proceso Completado: Agua Depurada Apta para Riego";
+                    stepDesc.innerText = "El efluente ha sido totalmente purificado. Cero riesgo de contaminación de napas subterráneas.";
+                    startBtn.disabled = false;
+                    startBtn.classList.remove('opacity-50');
+                }
+            }, 100);
+        }
+
+        // --- CALCULADORA SANITARIA LOGIC ---
+        function calculateSanitaryAptitude() {
+            const ph = parseFloat(document.getElementById('input-ph').value);
+            const ntu = parseInt(document.getElementById('input-ntu').value);
+            const sensory = document.getElementById('input-sensory').value;
+            const use = document.getElementById('input-use').value;
+
+            document.getElementById('calc-ph-val').innerText = ph;
+            document.getElementById('calc-ntu-val').innerText = `${ntu} NTU`;
+
+            const badge = document.getElementById('calc-badge');
+            const title = document.getElementById('calc-title');
+            const desc = document.getElementById('calc-desc');
+            const resultBox = document.getElementById('calc-result-box');
+            const riskMetric = document.getElementById('calc-metric-risk');
+
+            let isApto = true;
+            let reason = "";
+
+            if (ph < 6.0 || ph > 8.5) {
+                isApto = false;
+                reason += "pH fuera de rango seguro (6.0 - 8.5). ";
+            }
+            if (ntu > 30) {
+                isApto = false;
+                reason += "Turbidez elevada superior a 30 NTU. ";
+            }
+            if (sensory === "fuerte") {
+                isApto = false;
+                reason += "Presencia de olores sulfurosos no deseados. ";
+            }
+
+            if (isApto) {
+                badge.className = "px-3 py-1 rounded-full bg-verdeagua-500 text-slate-950 font-black text-xs";
+                badge.innerText = "APTO PARA RIEGO";
+                title.innerText = "Agua Depurada de Alta Pureza";
+                desc.innerText = `El efluente analizado cumple con todas las exigencias físico-químicas para el destino seleccionado (${use === 'gardens' ? 'Jardines' : use === 'trees' ? 'Arbolado' : 'Cultivos'}).`;
+                resultBox.className = "glass-panel p-6 sm:p-8 rounded-3xl border-2 border-verdeagua-500/40 bg-verdeagua-500/10 min-h-[380px] flex flex-col justify-between transition-all";
+                riskMetric.innerText = "Muy Bajo (< 0.01%)";
+                riskMetric.className = "text-verdeagua-300 font-bold";
+            } else {
+                badge.className = "px-3 py-1 rounded-full bg-red-500 text-white font-black text-xs";
+                badge.innerText = "REQUIERE RE-FILTRADO";
+                title.innerText = "Parámetros Fuera de Norma";
+                desc.innerText = `Atención: ${reason} Se recomienda ciclo adicional en cámara de filtrado de carbón activado.`;
+                resultBox.className = "glass-panel p-6 sm:p-8 rounded-3xl border-2 border-red-500/40 bg-red-500/10 min-h-[380px] flex flex-col justify-between transition-all";
+                riskMetric.innerText = "Moderado / Alto";
+                riskMetric.className = "text-red-400 font-bold";
+            }
+        }
+
+        // --- ARDUINO CHART & REALTIME SIMULATION ---
+        let arduinoChart = null;
+        let arduinoIsRunning = true;
+
+        function initArduinoChart() {
+            const ctx = document.getElementById('arduinoChart').getContext('2d');
+            const labels = Array.from({length: 15}, (_, i) => `${i*2}s`);
+            
+            arduinoChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'pH (Sensor A0)',
+                            data: Array(15).fill(7.2),
+                            borderColor: '#38BDF8',
+                            backgroundColor: 'rgba(56, 189, 248, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: 'Turbidez NTU (Sensor A1 / 10)',
+                            data: Array(15).fill(1.4),
+                            borderColor: '#10B981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.4,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                            ticks: { color: '#94a3b8' }
+                        },
+                        x: {
+                            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                            ticks: { color: '#94a3b8' }
+                        }
+                    },
+                    plugins: {
+                        legend: { labels: { color: '#e2e8f0' } }
+                    }
+                }
+            });
+
+            // Start dynamic tick update
+            setInterval(updateArduinoRealtimeData, 1500);
+        }
+
+        function updateArduinoRealtimeData() {
+            if (!arduinoIsRunning || !arduinoChart) return;
+
+            const randomPh = (7.1 + (Math.random() * 0.2 - 0.1)).toFixed(2);
+            const randomNtu = (13.5 + (Math.random() * 2 - 1)).toFixed(1);
+
+            document.getElementById('live-ph-val').innerText = randomPh;
+            document.getElementById('live-ntu-val').innerText = `${randomNtu} NTU`;
+
+            // Push to chart
+            arduinoChart.data.datasets[0].data.shift();
+            arduinoChart.data.datasets[0].data.push(randomPh);
+
+            arduinoChart.data.datasets[1].data.shift();
+            arduinoChart.data.datasets[1].data.push((randomNtu / 10).toFixed(2));
+
+            arduinoChart.update('none');
+        }
+
+        function toggleArduinoSimulation() {
+            arduinoIsRunning = !arduinoIsRunning;
+            const btn = document.getElementById('arduino-toggle-btn');
+            if (arduinoIsRunning) {
+                btn.innerHTML = `<i data-lucide="pause" class="w-3.5 h-3.5 inline mr-1"></i> Pausar Captura`;
+            } else {
+                btn.innerHTML = `<i data-lucide="play" class="w-3.5 h-3.5 inline mr-1"></i> Reanudar Captura`;
+            }
+            lucide.createIcons();
+        }
+
+        function triggerSensorAnomaly() {
+            document.getElementById('live-ph-val').innerText = "5.20 (¡Alerta!)";
+            document.getElementById('live-ntu-val').innerText = "88.0 NTU";
+            
+            if (arduinoChart) {
+                arduinoChart.data.datasets[0].data[arduinoChart.data.datasets[0].data.length - 1] = 5.2;
+                arduinoChart.data.datasets[1].data[arduinoChart.data.datasets[1].data.length - 1] = 8.8;
+                arduinoChart.update();
+            }
+        }
+
+        // --- CRONOGRAMA 8 SEMANAS DATA & RENDER ---
+        const weeksData = {
+            1: {
+                title: "Semana 1: Planificación y Diseño Técnico",
+                desc: "Reunión organizativa de equipo, revisión bibliográfica de biodigestores y delimitación de requerimientos de la maqueta.",
+                tasks: ["Definición de roles de alumnos", "Cálculo de dimensionamiento hidráulico", "Adquisición inicial de componentes Arduino"]
+            },
+            2: {
+                title: "Semana 2: Adquisición y Preparación de Materiales",
+                desc: "Compra de cañerías PVC, grava, arena lavada, carbón activado vegetal y placa microcontroladora Arduino Uno R3.",
+                tasks: ["Pruebas de porosidad de materiales filtrantes", "Corte de MDF para base de maqueta", "Calibración inicial de sensores de pH"]
+            },
+            3: {
+                title: "Semana 3: Ensamblado del Biodigestor y Estructura",
+                desc: "Montaje físico del tanque primario de biodigestión anaerobia y acople de tubos de derivación e inspección.",
+                tasks: ["Sellado de uniones con silicona estanca", "Prueba de hermetismo hidráulico", "Instalación de trampa de grasa aislante"]
+            },
+            4: {
+                title: "Semana 4: Construcción de la Cámara Ecológica",
+                desc: "Disposición secuencial de las capas purificadoras de Grava, Arena y Carbón Activado dentro de la cámara filtrante.",
+                tasks: ["Estratificación por granulometría", "Colocación de mallas finas separadoras", "Prueba de flujo contrapresión"]
+            },
+            5: {
+                title: "Semana 5: Integración Electrónica Arduino",
+                desc: "Programación e integración de sensores de pH, turbidez y nivel de ultrasonido en la placa con indicador de LEDs.",
+                tasks: ["Carga del código C++ en Arduino Uno", "Conexión de pantalla LCD de estado", "Ajuste de umbrales de alerta sanitaria"]
+            },
+            6: {
+                title: "Semana 6: Pruebas de Funcionamiento y Filtrado",
+                desc: "Pruebas experimentales introduciendo muestras de agua gris simulada para medir la tasa de remoción de sólidos.",
+                tasks: ["Medición del cambio de turbidez NTU", "Verificación de la bomba de expulsión", "Corrección de pérdidas o filtraciones"]
+            },
+            7: {
+                title: "Semana 7: Finalización de Maqueta y Acabados",
+                desc: "Pintura acrílica de componentes, señalización de flujo hidráulico y montaje estético para presentación pública.",
+                tasks: ["Aplicación de detalles en color celeste y verde menta", "Rotulado técnico de etapas", "Ensayo general de demostración"]
+            },
+            8: {
+                title: "Semana 8: Redacción del Informe y Exposición",
+                desc: "Consolidación del informe técnico final por parte del equipo bajo la supervisión de Isabel Mercado.",
+                tasks: ["Sintetización de resultados obtenidos", "Diseño de diapositivas de presentación", "Aprobación y entrega del proyecto BIONEX"]
+            }
+        };
+
+        function initCronogramaWeeks() {
+            const container = document.getElementById('week-buttons-container');
+            container.innerHTML = "";
+
+            for (let i = 1; i <= 8; i++) {
+                const btn = document.createElement('button');
+                btn.id = `cron-week-btn-${i}`;
+                btn.onclick = () => selectCronogramaWeek(i);
+                btn.className = i === 1 
+                    ? "px-4 py-2 rounded-xl text-xs font-bold bg-gradient-celeste-verde text-slate-950 shadow-md transition"
+                    : "px-4 py-2 rounded-xl text-xs font-bold glass-panel text-slate-300 hover:text-white border border-slate-800 transition";
+                btn.innerText = `S${i}`;
+                container.appendChild(btn);
+            }
+
+            selectCronogramaWeek(1);
+        }
+
+        function selectCronogramaWeek(weekNum) {
+            for (let i = 1; i <= 8; i++) {
+                const btn = document.getElementById(`cron-week-btn-${i}`);
+                if (i === weekNum) {
+                    btn.className = "px-4 py-2 rounded-xl text-xs font-bold bg-gradient-celeste-verde text-slate-950 shadow-md transition";
+                } else {
+                    btn.className = "px-4 py-2 rounded-xl text-xs font-bold glass-panel text-slate-300 hover:text-white border border-slate-800 transition";
+                }
+            }
+
+            const data = weeksData[weekNum];
+            const panel = document.getElementById('week-detail-panel');
+
+            panel.innerHTML = `
+                <div class="flex items-center justify-between mb-4">
+                    <span class="px-3 py-1 rounded-full bg-verdeagua-500/20 text-verdeagua-300 text-xs font-bold uppercase tracking-widest border border-verdeagua-500/30">
+                        Etapa Cronológica: Semana ${weekNum} de 8
+                    </span>
+                    <span class="text-xs text-slate-400 font-semibold">Proyecto BIONEX - EEST N.º 2</span>
+                </div>
+
+                <h4 class="text-2xl font-bold text-white mb-2">${data.title}</h4>
+                <p class="text-slate-300 text-xs sm:text-sm leading-relaxed mb-6">${data.desc}</p>
+
+                <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-3">
+                    <span class="text-xs font-bold text-celeste-400 uppercase tracking-wider block">Hitos y Tareas Cumplidas:</span>
+                    ${data.tasks.map(t => `
+                        <div class="flex items-center space-x-3 text-xs text-slate-200">
+                            <i data-lucide="check-square" class="w-4 h-4 text-verdeagua-400 flex-shrink-0"></i>
+                            <span>${t}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>
